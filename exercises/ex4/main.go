@@ -7,8 +7,6 @@ import (
 	"github.com/ndaversa/go-101/exercises/ex4/store"
 )
 
-var db = store.New()
-
 type Person struct {
 	Name string
 	Age  int
@@ -22,7 +20,7 @@ func (p Person) Key() uint64 {
 	return uint64(p.Age)
 }
 
-func Log(p Person, wg *sync.WaitGroup) {
+func Log(p Person, db *store.InMemory, wg *sync.WaitGroup) {
 	key := db.Put(p)
 	person := db.Get(key)
 	fmt.Println(person)
@@ -32,11 +30,13 @@ func Log(p Person, wg *sync.WaitGroup) {
 func main() {
 	var wg sync.WaitGroup
 
+	db := store.New()
+
 	wg.Add(5)
-	go Log(Person{Name: "Nino", Age: 33}, &wg)
-	go Log(Person{Name: "Jonathan", Age: 38}, &wg)
-	go Log(Person{Name: "Yan", Age: 23}, &wg)
-	go Log(Person{Name: "Nihal", Age: 28}, &wg)
-	go Log(Person{Name: "Long", Age: 27}, &wg)
+	go Log(Person{Name: "Nino", Age: 33}, db, &wg)
+	go Log(Person{Name: "Jonathan", Age: 38}, db, &wg)
+	go Log(Person{Name: "Yan", Age: 23}, db, &wg)
+	go Log(Person{Name: "Nihal", Age: 28}, db, &wg)
+	go Log(Person{Name: "Long", Age: 27}, db, &wg)
 	wg.Wait()
 }
