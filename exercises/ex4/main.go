@@ -29,7 +29,6 @@ func Log(p Person, db *store.InMemory, wg *sync.WaitGroup) {
 
 func main() {
 	var wg sync.WaitGroup
-
 	db := store.New()
 
 	wg.Add(5)
